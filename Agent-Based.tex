@@ -1,0 +1,99 @@
+% coding: utf-8
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{unicode-math}
+	\setmainfont{XCharter}                     % Charter font for text
+	\setmathfont[Scale=1.12]{xits-math.otf}    % Stix font for math
+	\setmonofont[Scale=1.12]{LMMono-9-Regular} % TeX font for mono space
+\usepackage[a4paper, includefoot]{geometry}
+\usepackage{natbib} % \citet
+\usepackage{newunicodechar}
+	\newunicodechar{❪}{\left(}
+	\newunicodechar{❫}{\right)}
+\usepackage{graphicx}
+\usepackage{siunitx}
+	\sisetup{locale=US}
+\usepackage[english]{babel}
+\bibliographystyle{apa}
+\author{%
+Kaoutar Harakat\thanks{\textsc{Érudite}, Université \textsc{Paris}-\textsc{Est} \textsc{Créteil}.}
+\and
+François Legendre\thanks{\textsc{Érudite}, Université \textsc{Paris}-\textsc{Est} \textsc{Créteil}.}
+}
+\title{An agent-based model}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In this paper, following \citet{Colander-et-al/2008}, we build a very simple agent-based model.
+\end{abstract}
+
+\bigskip
+
+\noindent \textbf{Keywords:} Agent-based model.
+
+\bigskip
+
+\section{Introduction}
+
+Blah blah.
+
+\section{The model}
+
+$I$ goods and markets, $H$ households with endownment~$\overline q_{hi}$, $h = 1, …, H$, $i = 1, …, I$ and preferences represented with the following CES utility function 
+\[
+	u_h(q_{h1}, …, q_{hI}) = ❪∑_{i=1}^{I} 𝛼_{hi} q_{hi}^{(𝜎-1)/𝜎}❫^{𝜎/(𝜎-1)}
+\]
+Each household solves the following program
+\[
+	\max_{q_{h1}, …, q_{hI}} ~ u_h(q_{h1}, …, q_{hI}) \quad ∑_{i=1}^{I} P_i q_{hi} ≤ ∑_{i=1}^{I} P_i \overline q_{hi}
+\]
+where~$P_i$ is the price of good~$i$. Let us define, for household~$h$, a general level of prices:
+\[
+	{\cal P}_h = ❪∑_{i=1}^{I} 𝛼_{hi}^𝜎 P_i^{1-𝜎}❫^{1/(1-𝜎)}
+\]
+Then, the optimal demand for good~$i$ is
+\[
+	q^⋆_{hi} = 𝛼_{hi}^𝜎 ❪\frac{P_i}{{\cal P}_h}❫^{-𝜎} \frac{∑_{i=1}^{I} P_i \overline q_{hi}}{{\cal P}_h}
+\]
+If $q^⋆_{hi} < \overline q_{hi}$, the household~$h$ supplies a $\overline q_{hi} - q^⋆_{hi}$ quantity of good~$i$; else, it demands a $q^⋆_{hi} - \overline q_{hi}$ quantity of good~$i$:
+\[
+	q_{hi}^s =
+	\begin{cases}
+		\overline q_{hi} - q^⋆_{hi} \quad & \text{if} \quad q^⋆_{hi} < \overline q_{hi} \\
+		0 & \text{else}
+	\end{cases}
+	\qquad
+	\text{and}
+	\qquad
+	q_{hi}^d =
+	\begin{cases}
+		\overline q^⋆_{hi} - \overline q_{hi} \quad & \text{if} \quad q^⋆_{hi} ≥ \overline q_{hi} \\
+		0 & \text{else}
+	\end{cases}
+\]
+
+\section{The walrasian tâtonnement}
+
+At iteration~$s$, the prices are set at level~$P_1^s, …, P_I^s$. On each market, an agregate supply and an agregate demand are computed:
+\[
+	Q_i^s = ∑_{h=1}^{H} q_{hi}^s(P_1^s, …, P_I^s)
+	\qquad
+	\text{and}
+	\qquad
+	Q_i^d = ∑_{h=1}^{H} q_{hi}^d(P_1^d, …, P_I^d)
+\]
+The relative excess demand, on each market, is
+\[
+	\emph{RED}_i = \frac{Q_i^d - Q_i^s}{(Q_i^d + Q_i^s)/2} \quad ∀ ~ i = 1, …, I
+\]
+The prices are updated with respect to the relative excess demand:
+\[
+	P_i^{s+1} = (1 + 𝜆\,\emph{RED}_i) P_i^s \quad 0 < 𝜆 < 1
+\]
+where~$𝜆$ is a damping factor.
+
+The walrasian tâtonnement is completed when the relative excess demand is null on each market.
+
+\bibliography{Agent-Based}
+\end{document}
